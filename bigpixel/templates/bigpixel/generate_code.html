@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h2>Track Events & Build Custom Automations</h2>
+            <p>Keep track of every visitor that comes to your page,
+                purchases your product or signs up for your email list.
+                Use these tracked events to create custom automation
+                workflow to maximize conversion</p>
+            {% if not pixel_tracking_code_exists %}
+                <form method="post" action="{% url 'generate_pixel_code' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">
+                        Generate My Big Tracking Pixel Code
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if pixel_tracking_code_exists %}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="clear-fix">
+                    <div class="pull-left">
+                        <h2>Your Big Tracking Pixel</h2>
+                        <p>Copy the Tracking Pixel Code and Install it using one of the options below.</p>
+                    </div>
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-primary">Copy</button>
+                    </div>
+                </div>
+                {{ pixel_code_preview.tracking_code }}
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h2>Validate Big Tracking Pixel</h2>
+                <form method="post" action="{% url 'validate_pixel_code' %}">
+                    {% csrf_token %}
+                    {{ pixel_code_validation_form.as_p }}
+                    <button type="submit" class="btn btn-primary">Validate</button>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}
