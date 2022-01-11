@@ -1,6 +1,6 @@
 from django.urls import path
 
-from bigpixel.api import fetch_product_or_offer_by_name
+from bigpixel.api import fetch_product_or_offer_by_name, CreateOfferApi
 from bigpixel.views import HomeView, GeneratePixelCodeView, ValidatePixelCodeIntegrationView
 
 urlpatterns = [
@@ -9,4 +9,5 @@ urlpatterns = [
     path('validate-pixel-code/', ValidatePixelCodeIntegrationView.as_view(), name='validate_pixel_code'),
 
     path('fetch-products-offer/', fetch_product_or_offer_by_name),
+    path('create-offer/', CreateOfferApi.as_view()),
 ]

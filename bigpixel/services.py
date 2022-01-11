@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import transaction, IntegrityError, DatabaseError
 
-from bigpixel.models import PixelTrackingCode, PixelTrackingCodeSite
+from bigpixel.models import PixelTrackingCode, PixelTrackingCodeSite, Product, Offer
 from helpers.generators import alphanumerical_generator
 
 
@@ -38,3 +38,20 @@ def validate_user_pixel_tracking_code(*,
         return False
     except DatabaseError as e:
         return False
+
+
+# create offer service
+def create_offer(*,
+                 name: str,
+                 owner: User,
+                 trigger_type: str,
+                 offer_value: str = None) -> Offer:
+    product = None
+    if Product.objects.filter(name=name, owner=owner).exists():
+        product = Product.objects.filter(name=name, owner=owner).first()
+
+    return Offer.objects.create(name=name,
+                                owner=owner,
+                                product=product,
+                                trigger_type=trigger_type,
+                                offer_value=offer_value)
